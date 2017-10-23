@@ -1,0 +1,24 @@
+{
+  "name": "vue-bulma-accordion",
+  "version": "0.1.0",
+  "description": "A simple accordion or collapsible styled with Bulma, animated by Velocity and sprinkled with Font Awesome ",
+  "main": "dist/bulma-accordion.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Vue",
+    "Bulma",
+    "Velocity",
+    "Font-Awesome",
+    "Accordion",
+    "Collapsible"
+  ],
+  "author": "Gabriel Soicher <gabe@underware.co.za>",
+  "license": "MIT",
+  "dependencies": {
+    "bulma": "^0.6.0",
+    "font-awesome": "^4.7.0",
+    "velocity-animate": "^1.5.0"
+  }
+}
