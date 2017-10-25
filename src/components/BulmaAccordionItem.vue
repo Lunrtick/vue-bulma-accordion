@@ -92,7 +92,7 @@ export default {
         footerClasses () {
             return {
                 'card-footer': true,
-                'is-hidden': this.$slots.footer,
+                'is-hidden': !this.$slots.footer,
             }
         },
     },
