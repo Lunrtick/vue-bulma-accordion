@@ -1,7 +1,7 @@
 {
   "name": "vue-bulma-accordion",
   "description": "A simple accordion or collapsible styled with Bulma, animated by Velocity and sprinkled with Font Awesome.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": {
     "name": "Gabriel Soicher",
     "email": "gabe@underware.co.za"
