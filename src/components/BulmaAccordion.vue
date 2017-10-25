@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'pro-bulma-accordio',
+    name: 'bulma-accordion',
     props: {
         animation: {
             required: false,
@@ -14,7 +14,7 @@ export default {
             default: 'none',
             validator: (choice) => {
                 const isValid =
-                    choice === 'flip' ||
+                    choice === 'spin' ||
                     choice === 'none'
                 return isValid
             },

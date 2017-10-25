@@ -22,6 +22,18 @@ Single File Component:
 
 ```javascript
 import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion'
+
+export default {
+    name: 'cool-component',
+    data () {
+        return {
+        }
+    },
+    components: {
+        BulmaAccordion,
+        BulmaAccordionItem,
+    },
+}
 ```
 ## Browser
 
@@ -57,7 +69,7 @@ Put a `<BulmaAccordion>` item on your page. There are currently two options for 
     * String
     * Currently you have 2 choices
         * 'none' - the default. The arrow simply switches instantly
-        * 'flip' - the arrow rotates and expands slightly
+        * 'spin' - the arrow rotates and expands slightly
 
 Fill it with as many `<BulmaAccordionItem>` components as you need. Each of the `<BulmaAccordionItem>` components has 3 slots:
 1. title - I've found `<h4 class="title is-4 has-text-weight-normal" slot="title">The Title</h4>` to look quite nice
@@ -69,7 +81,7 @@ Fill it with as many `<BulmaAccordionItem>` components as you need. Each of the 
 ```html
 <BulmaAccordion
 accordion
-animation="flip"
+animation="spin"
 > <!-- The wrapper component for all the items -->
     <BulmaAccordionItem>
         <h4 slot="title">Just a title</h4>

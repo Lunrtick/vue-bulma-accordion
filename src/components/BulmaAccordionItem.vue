@@ -17,7 +17,7 @@
             <div class="card-content">
                 <slot name="content"></slot>
             </div>
-            <div class="card-footer">
+            <div :class="footerClasses">
                 <slot name="footer"></slot>
             </div>
         </div>
@@ -28,7 +28,7 @@
 import Velocity from 'velocity-animate'
 
 export default {
-    name: 'pro-bulma-accordion-item',
+    name: 'bulma-accordion-item',
     data () {
         return {
             isOpen: false,
@@ -87,6 +87,12 @@ export default {
                 head: 'h' + this._uid,
                 body: 'b' + this._uid,
                 footer: 'f' + this._uid,
+            }
+        },
+        footerClasses () {
+            return {
+                'card-footer': true,
+                'is-hidden': this.$slots.footer,
             }
         },
     },
