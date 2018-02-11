@@ -12,9 +12,7 @@
     "plugin",
     "Accordion",
     "Bulma",
-    "Collapsible",
-    "VelocityJS",
-    "Font Awesome"
+    "Collapsible"
   ],
   "license": "MIT",
   "main": "dist/vue-bulma-accordion.common.js",
@@ -51,13 +49,12 @@
     "eslint-plugin-standard": "^2.0.1",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "vue-loader": "^10.0.0",
-    "vue-template-compiler": "^2.1.6",
-    "webpack": "^2.1.0-beta.28",
+    "vue-svg-loader": "^0.5.0",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^2.7.0",
     "webpack-merge": "^1.1.2"
   },
   "dependencies": {
-    "bulma": "^0.6.0",
-    "font-awesome": "^4.7.0",
-    "velocity-animate": "^1.5.0"
+    "bulma": "^0.6.2"
   }
 }

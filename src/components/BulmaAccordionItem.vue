@@ -4,16 +4,19 @@
             <p class="card-header-title">
                 <slot name="title"></slot>
             </p>
-            <p class="card-header-icon" aria-label="more options">
-                <span class="icon">
-                    <transition :name="animation" mode="out-in">
-                        <i v-if="isOpen" key="up_arrow" class="fa fa-angle-up" aria-hidden="true"></i>
-                        <i v-else key="down_arrow" class="fa fa-angle-down" aria-hidden="true"></i>
-                    </transition>
+            <p class="card-header-icon">
+                <span v-if="!usingCustomIcon" class="icon">
+                    <Caret v-if="showCaret" :class="dropdownIconClasses" :style="iconStyle"/>
+                    <PlusMinus v-if="showPlus || showMinus" :minus="showMinus"/>
+                </span>
+                <span v-else class="icon">
+                    <slot name="icon"></slot>
+                    <slot v-if="isOpen" name="icon-open"></slot>
+                    <slot v-else name="icon-closed"></slot>
                 </span>
             </p>
         </div>
-        <div class="accordion-body" :id="item_ids.body">
+        <div class="accordion-body" ref="body" :style="slideStyle">
             <div class="card-content">
                 <slot name="content"></slot>
             </div>
@@ -25,20 +28,18 @@
 </template>
 
 <script>
-import Velocity from 'velocity-animate'
-
+import Caret from '../icons/caret.svg'
+import PlusMinus from './PlusMinus.vue'
 export default {
     name: 'bulma-accordion-item',
+    components: {
+        Caret,
+        PlusMinus,
+    },
     data () {
         return {
             isOpen: false,
-            animation: 'none',
-            isAccordion: false,
         }
-    },
-    created () {
-        this.animation = this.$parent.animation
-        this.isAccordion = this.$parent.accordion
     },
     mounted () {
         this.$parent.$on('toggle', this.collapse)
@@ -56,24 +57,49 @@ export default {
             this.isOpen = false
         },
         toggleCollapsed () {
-            if (!this.isOpen && this.isAccordion) this.$parent.$emit('toggle')
+            if (!this.isOpen && !this.isDropdown) this.$parent.$emit('toggle')
             this.isOpen = !this.isOpen
         },
         doTheSlide () {
-            const element = document.getElementById(this.item_ids.body)
+            const element = this.$refs.body
             if (this.isOpen === true) {
-                Velocity(element, 'slideDown', {duration: 500})
+                this.slideDown(element)
             } else {
-                Velocity(element, 'slideUp', {duration: 500})
+                this.slideUp(element)
             }
+        },
+        slideDown (el) {
+            el.style.height = `${el.scrollHeight}px`
+        },
+        slideUp (el) {
+            el.style.height = '0px'
         },
     },
     computed: {
-        dropdown_icon_classes () {
+        config () {
+            const {
+                caretAnimation: animation = {
+                    duration: '750ms',
+                    timerFunc: 'ease',
+                },
+                dropdown = false,
+                icon = 'caret',
+                slide = {
+                    duration: '1000ms',
+                    timerFunc: 'ease',
+                },
+            } = this.$parent
             return {
-                'fa': true,
-                'fa-angle-down': !this.isOpen,
-                'fa-angle-up': this.isOpen,
+                animation,
+                dropdown,
+                icon,
+                slide,
+            }
+        },
+        dropdownIconClasses () {
+            return {
+                'header-icon': true,
+                'caret-down': !this.isOpen,
             }
         },
         card_classes () {
@@ -82,17 +108,34 @@ export default {
                 'card-active': this.isOpen,
             }
         },
-        item_ids () {
-            return {
-                head: 'h' + this._uid,
-                body: 'b' + this._uid,
-                footer: 'f' + this._uid,
-            }
-        },
         footerClasses () {
             return {
                 'card-footer': true,
                 'is-hidden': !this.$slots.footer,
+            }
+        },
+        usingCustomIcon () {
+            return this.config.icon === 'custom'
+        },
+        showCaret () {
+            return this.config.icon === 'caret'
+        },
+        showPlus () {
+            return this.config.icon === 'plus-minus' && !this.isOpen
+        },
+        showMinus () {
+            return this.config.icon === 'plus-minus' && this.isOpen
+        },
+        slideStyle () {
+            const c = this.config.slide
+            return {
+                'transition': `all ${c.duration} ${c.timerFunc}`,
+            }
+        },
+        iconStyle () {
+            const c = this.config.animation
+            return {
+                'transition': `all ${c.duration} ${c.timerFunc}`,
             }
         },
     },
@@ -101,16 +144,13 @@ export default {
 
 <style scoped>
 .accordion-body {
-    display: none;
+    height: 0px;
+    overflow: hidden;
 }
-/* Spin */
-.spin-leave-active, .spin-enter-active {
-    transition: transform .3s;
-}
-.spin-leave-to {
+.caret-down {
     transform: rotate(180deg);
 }
-.spin-enter {
-    transform: scale(1.3);
+.header-icon {
+    width: 100%;
 }
 </style>

@@ -8,21 +8,50 @@
 export default {
     name: 'bulma-accordion',
     props: {
-        animation: {
+        caretAnimation: {
             required: false,
-            type: String,
-            default: 'none',
-            validator: (choice) => {
+            type: Object,
+            default: () => ({
+                duration: '750ms',
+                timerFunc: 'ease',
+            }),
+            validator: (config) => {
                 const isValid =
-                    choice === 'spin' ||
-                    choice === 'none'
+                    typeof config.duration === 'string' &&
+                    typeof config.timerFunc === 'string'
                 return isValid
             },
         },
-        accordion: {
+        dropdown: {
             required: false,
             type: Boolean,
             default: false,
+        },
+        icon: {
+            required: false,
+            type: String,
+            default: 'caret',
+            validator: (choice) => {
+                const isValid =
+                    choice === 'caret' ||
+                    choice === 'plus-minus' ||
+                    choice === 'custom'
+                return isValid
+            },
+        },
+        slide: {
+            required: false,
+            type: Object,
+            default: () => ({
+                duration: '1000ms',
+                timerFunc: 'ease',
+            }),
+            validator: (config) => {
+                const isValid =
+                    typeof config.duration === 'string' &&
+                    typeof config.timerFunc === 'string'
+                return isValid
+            },
         },
     },
 }

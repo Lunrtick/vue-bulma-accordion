@@ -1,75 +1,30 @@
+<template>
+    <div class="plus-minus">
+        <div class="horizontal"></div>
+        <div :class="verticalClasses"></div>
+    </div>
+</template>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.accordion-body[data-v-026fc950] {
-    height: 0px;
-    overflow: hidden;
+<script>
+export default {
+    props: {
+        minus: {
+            required: true,
+            type: Boolean,
+        },
+    },
+    computed: {
+        verticalClasses () {
+            return {
+                'vertical': true,
+                'vertical-rotated': this.minus,
+            }
+        },
+    },
 }
-.caret-down[data-v-026fc950] {
-    transform: rotate(180deg);
-}
-.header-icon[data-v-026fc950] {
-    width: 100%;
-}
+</script>
 
+<style>
 .horizontal, .vertical {
     position: absolute;
     border-radius: 3px;
@@ -79,12 +34,14 @@
     -webkit-transition: 400ms all ease-out;
     transition: 400ms all ease-out;
 }
+
 .horizontal {
     top: 45%;
     left: 10%;
     right: 10%;
     height: 10%;
 }
+
 .vertical {
     top: 10%;
     bottom: 10%;
@@ -101,3 +58,4 @@
     width: 100%;
     height: 100%;
 }
+</style>

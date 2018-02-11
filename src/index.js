@@ -12,7 +12,6 @@ export {
 }
 
 /* -- Plugin definition & Auto-install -- */
-/* You shouldn't have to modify the code below */
 
 // Plugin
 const plugin = {

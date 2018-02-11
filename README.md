@@ -149,3 +149,7 @@ npm run build
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
+
+## Credits
+Icons made by Eleonor Wang, Smashicons, Appzgear on www.flaticon.com, licensed by CC 3.0 BY
+
