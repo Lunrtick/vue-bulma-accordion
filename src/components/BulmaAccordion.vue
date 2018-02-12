@@ -12,13 +12,14 @@ export default {
             required: false,
             type: Object,
             default: () => ({
-                duration: '750ms',
+                duration: '450ms',
                 timerFunc: 'ease',
             }),
             validator: (config) => {
                 const isValid =
-                    typeof config.duration === 'string' &&
-                    typeof config.timerFunc === 'string'
+                    (typeof config.duration === 'string' &&
+                    typeof config.timerFunc === 'string') ||
+                    config.none === true
                 return isValid
             },
         },
@@ -43,7 +44,7 @@ export default {
             required: false,
             type: Object,
             default: () => ({
-                duration: '1000ms',
+                duration: '700ms',
                 timerFunc: 'ease',
             }),
             validator: (config) => {

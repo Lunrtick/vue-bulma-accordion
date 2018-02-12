@@ -1,7 +1,7 @@
 {
   "name": "vue-bulma-accordion",
-  "description": "A simple accordion or collapsible styled with Bulma, animated by Velocity and sprinkled with Font Awesome.",
-  "version": "0.1.7",
+  "description": "A simple, easily configurable accordion or collapsible for Vue, styled with Bulma",
+  "version": "0.2.0",
   "author": {
     "name": "Gabriel Soicher",
     "email": "gabe@underware.co.za"
@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/Lunrtick/vue-bulma-accordion/issues"
   },
-  "homepage": "https://github.com/Lunrtick/vue-bulma-accordion#readme",
+  "homepage": "https://lunrtick.github.io/vue-bulma-accordion/",
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-eslint": "^7.1.1",
@@ -55,6 +55,7 @@
     "webpack-merge": "^1.1.2"
   },
   "dependencies": {
-    "bulma": "^0.6.2"
+    "bulma": "^0.6.2",
+    "vue": "^2.5.2"
   }
 }

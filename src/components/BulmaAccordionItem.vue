@@ -79,13 +79,13 @@ export default {
         config () {
             const {
                 caretAnimation: animation = {
-                    duration: '750ms',
+                    duration: '450ms',
                     timerFunc: 'ease',
                 },
                 dropdown = false,
                 icon = 'caret',
                 slide = {
-                    duration: '1000ms',
+                    duration: '700ms',
                     timerFunc: 'ease',
                 },
             } = this.$parent
@@ -134,6 +134,9 @@ export default {
         },
         iconStyle () {
             const c = this.config.animation
+            if (c.none === true) {
+                return {}
+            }
             return {
                 'transition': `all ${c.duration} ${c.timerFunc}`,
             }

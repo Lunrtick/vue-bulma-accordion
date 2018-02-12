@@ -29,9 +29,7 @@ export default {
     position: absolute;
     border-radius: 3px;
     background: rgb(100, 100, 100);
-    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
-    -webkit-transition: 400ms all ease-out;
     transition: 400ms all ease-out;
 }
 
@@ -49,7 +47,6 @@ export default {
     width: 10%;
 }
 .vertical-rotated {
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 .plus-minus {
