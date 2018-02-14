@@ -30,6 +30,23 @@
 <script>
 import Caret from '../icons/caret.svg'
 import PlusMinus from './PlusMinus.vue'
+
+// got this from https://stackoverflow.com/a/9090128, tidied it up somewhat
+function transitionEndEventName (el) {
+    const transitions = {
+        'transition': 'transitionend',
+        'OTransition': 'otransitionend',  // oTransitionEnd in very old Opera
+        'MozTransition': 'transitionend',
+        'WebkitTransition': 'webkitTransitionEnd',
+    }
+    for (const t in transitions) {
+        if (transitions.hasOwnProperty(t) && el.style[t] !== undefined) {
+            return transitions[t]
+        }
+    }
+    throw new Error('TransitionEnd event is not supported in this browser')
+}
+
 export default {
     name: 'bulma-accordion-item',
     components: {
@@ -39,10 +56,22 @@ export default {
     data () {
         return {
             isOpen: false,
+            bodyScrollHeight: null,
+            autoHeightInterval: null,
         }
     },
     mounted () {
         this.$parent.$on('toggle', this.collapse)
+        const accordionBody = this.$refs.body
+        this.bodyScrollHeight = accordionBody.scrollHeight
+        const eName = transitionEndEventName(accordionBody)
+        accordionBody.addEventListener(eName, (e) => {
+            if (accordionBody.style.height !== '0px') {
+                this.autoHeightStart(accordionBody)
+            } else {
+                this.autoHeightStop()
+            }
+        })
     },
     destroyed () {
         this.$parent.$off('toggle')
@@ -57,7 +86,7 @@ export default {
             this.isOpen = false
         },
         toggleCollapsed () {
-            if (!this.isOpen && !this.isDropdown) this.$parent.$emit('toggle')
+            if (!this.isOpen && !this.config.dropdown) this.$parent.$emit('toggle')
             this.isOpen = !this.isOpen
         },
         doTheSlide () {
@@ -72,7 +101,25 @@ export default {
             el.style.height = `${el.scrollHeight}px`
         },
         slideUp (el) {
+            if (el.style.height === 'auto') {
+                el.style.height = `${el.scrollHeight}px`
+            }
             el.style.height = '0px'
+        },
+        autoHeightStart (el) {
+            // clear running interval
+            if (this.autoHeightInterval) this.autoHeightStop()
+            this.autoHeightInterval = setInterval(() => {
+                // set height for comparison to scrollHeight
+                const height = Number(el.style.height.substring(0, el.style.height.length).replace('px', ''))
+                if (el.style.height !== '0px' && height !== el.scrollHeight && this.isOpen) {
+                    this.slideDown(el)
+                }
+            }, 100)
+        },
+        autoHeightStop () {
+            clearInterval(this.autoHeightInterval)
+            this.autoHeightInterval = null
         },
     },
     computed: {

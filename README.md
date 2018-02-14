@@ -5,6 +5,12 @@
 
 A simple, easily configurable accordion or collapsible for Vue, styled with Bulma.
 
+## Changes in 0.3.0:
+### Responsiveness and animation
+- Added interval based checking to react to height changes of the accordion body (usually caused by adding or removing list items inside the component)
+### Fixes
+- the dropdown option now correctly toggles multiple open items
+
 ## Table of contents
 
 - [Installation](#installation)
