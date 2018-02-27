@@ -17,7 +17,7 @@
             </p>
         </div>
         <div class="accordion-body" ref="body" :style="slideStyle">
-            <div class="card-content">
+            <div :class="card_content_classes">
                 <slot name="content"></slot>
             </div>
             <div :class="footerClasses">
@@ -58,6 +58,7 @@ export default {
             isOpen: false,
             bodyScrollHeight: null,
             autoHeightInterval: null,
+            showCardContent: false,
         }
     },
     mounted () {
@@ -70,6 +71,7 @@ export default {
                 this.autoHeightStart(accordionBody)
             } else {
                 this.autoHeightStop()
+                this.showCardContent = false
             }
         })
     },
@@ -79,47 +81,6 @@ export default {
     watch: {
         isOpen (isOpen) {
             this.doTheSlide()
-        },
-    },
-    methods: {
-        collapse () {
-            this.isOpen = false
-        },
-        toggleCollapsed () {
-            if (!this.isOpen && !this.config.dropdown) this.$parent.$emit('toggle')
-            this.isOpen = !this.isOpen
-        },
-        doTheSlide () {
-            const element = this.$refs.body
-            if (this.isOpen === true) {
-                this.slideDown(element)
-            } else {
-                this.slideUp(element)
-            }
-        },
-        slideDown (el) {
-            el.style.height = `${el.scrollHeight}px`
-        },
-        slideUp (el) {
-            if (el.style.height === 'auto') {
-                el.style.height = `${el.scrollHeight}px`
-            }
-            el.style.height = '0px'
-        },
-        autoHeightStart (el) {
-            // clear running interval
-            if (this.autoHeightInterval) this.autoHeightStop()
-            this.autoHeightInterval = setInterval(() => {
-                // set height for comparison to scrollHeight
-                const height = Number(el.style.height.substring(0, el.style.height.length).replace('px', ''))
-                if (el.style.height !== '0px' && height !== el.scrollHeight && this.isOpen) {
-                    this.slideDown(el)
-                }
-            }, 100)
-        },
-        autoHeightStop () {
-            clearInterval(this.autoHeightInterval)
-            this.autoHeightInterval = null
         },
     },
     computed: {
@@ -155,6 +116,12 @@ export default {
                 'card-active': this.isOpen,
             }
         },
+        card_content_classes () {
+            return {
+                'card-content': true,
+                'is-hidden': !this.showCardContent,
+            }
+        },
         footerClasses () {
             return {
                 'card-footer': true,
@@ -187,6 +154,51 @@ export default {
             return {
                 'transition': `all ${c.duration} ${c.timerFunc}`,
             }
+        },
+    },
+    methods: {
+        collapse () {
+            this.isOpen = false
+        },
+        toggleCollapsed () {
+            if (!this.isOpen && !this.config.dropdown) this.$parent.$emit('toggle')
+            this.isOpen = !this.isOpen
+        },
+        doTheSlide () {
+            const element = this.$refs.body
+            if (this.isOpen === true) {
+                this.showCardContent = true
+                this.$nextTick()
+                    .then(() => {
+                        this.slideDown(element)
+                    })
+            } else {
+                this.slideUp(element)
+            }
+        },
+        slideDown (el) {
+            el.style.height = `${el.scrollHeight}px`
+        },
+        slideUp (el) {
+            if (el.style.height === 'auto') {
+                el.style.height = `${el.scrollHeight}px`
+            }
+            el.style.height = '0px'
+        },
+        autoHeightStart (el) {
+            // clear running interval
+            if (this.autoHeightInterval) this.autoHeightStop()
+            this.autoHeightInterval = setInterval(() => {
+                // set height for comparison to scrollHeight
+                const height = Number(el.style.height.substring(0, el.style.height.length).replace('px', ''))
+                if (el.style.height !== '0px' && height !== el.scrollHeight && this.isOpen) {
+                    this.slideDown(el)
+                }
+            }, 100)
+        },
+        autoHeightStop () {
+            clearInterval(this.autoHeightInterval)
+            this.autoHeightInterval = null
         },
     },
 }
