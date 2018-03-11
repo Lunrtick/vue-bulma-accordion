@@ -17,10 +17,10 @@
             </p>
         </div>
         <div class="accordion-body" ref="body" :style="slideStyle">
-            <div :class="card_content_classes">
+            <div :class="card_content_classes" ref="bodyContent">
                 <slot name="content"></slot>
             </div>
-            <div :class="footerClasses">
+            <div :class="footerClasses" ref="bodyFooter">
                 <slot name="footer"></slot>
             </div>
         </div>
@@ -56,7 +56,6 @@ export default {
     data () {
         return {
             isOpen: false,
-            bodyScrollHeight: null,
             autoHeightInterval: null,
             showCardContent: false,
         }
@@ -64,7 +63,6 @@ export default {
     mounted () {
         this.$parent.$on('toggle', this.collapse)
         const accordionBody = this.$refs.body
-        this.bodyScrollHeight = accordionBody.scrollHeight
         const eName = transitionEndEventName(accordionBody)
         accordionBody.addEventListener(eName, (e) => {
             if (accordionBody.style.height !== '0px') {
@@ -165,19 +163,19 @@ export default {
             this.isOpen = !this.isOpen
         },
         doTheSlide () {
-            const element = this.$refs.body
+            const el = this.$refs.body
             if (this.isOpen === true) {
                 this.showCardContent = true
                 this.$nextTick()
                     .then(() => {
-                        this.slideDown(element)
+                        this.adjustHeight(el, el.scrollHeight)
                     })
             } else {
-                this.slideUp(element)
+                this.slideUp(el)
             }
         },
-        slideDown (el) {
-            el.style.height = `${el.scrollHeight}px`
+        adjustHeight (el, newHeight) {
+            el.style.height = `${newHeight}px`
         },
         slideUp (el) {
             if (el.style.height === 'auto') {
@@ -186,13 +184,14 @@ export default {
             el.style.height = '0px'
         },
         autoHeightStart (el) {
+            window.mySpecialEl = el
             // clear running interval
             if (this.autoHeightInterval) this.autoHeightStop()
             this.autoHeightInterval = setInterval(() => {
                 // set height for comparison to scrollHeight
-                const height = Number(el.style.height.substring(0, el.style.height.length).replace('px', ''))
-                if (el.style.height !== '0px' && height !== el.scrollHeight && this.isOpen) {
-                    this.slideDown(el)
+                const actualHeight = this.$refs.bodyContent.scrollHeight + this.$refs.bodyFooter.scrollHeight + 1
+                if (el.style.height !== '0px' && actualHeight !== el.style.height && this.isOpen) {
+                    this.adjustHeight(el, actualHeight)
                 }
             }, 100)
         },
