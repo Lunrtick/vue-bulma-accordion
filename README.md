@@ -1,29 +1,38 @@
 # vue-bulma-accordion
 
-[![npm](https://img.shields.io/npm/v/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dm/vue-bulma-accordion.svg)](https://www.npmjs.com/package/vue-bulma-accordion)
+[![npm](https://img.shields.io/npm/v/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dm/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dt/express.svg)](https://www.npmjs.com/package/vue-bulma-accordion)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 A simple, easily configurable accordion or collapsible for Vue, styled with Bulma.
 
+## Bugfix 0.3.3
+
+*   Added auto-kill to interval for cases where the accordion is open and destroyed
+
 ## Changes in 0.3.0:
+
 ### Responsiveness and animation
-- Added interval based checking to react to height changes of the accordion body (usually caused by adding or removing list items inside the component)
+
+*   Added interval based checking to react to height changes of the accordion body (usually caused by adding or removing list items inside the component)
+
 ### Fixes
-- the dropdown option now correctly toggles multiple open items
+
+*   the dropdown option now correctly toggles multiple open items
 
 ## Table of contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Example](#example)
+*   [Installation](#installation)
+*   [Usage](#usage)
+*   [Example](#example)
 
 # Installation
 
 ```
-npm install --save vue-bulma-accordion 
+npm install --save vue-bulma-accordion
 ```
 
 ## Import
+
 Single File Component:
 
 ```javascript
@@ -31,16 +40,16 @@ import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion'
 
 export default {
     name: 'cool-component',
-    data () {
-        return {
-        }
+    data() {
+        return {}
     },
     components: {
         BulmaAccordion,
-        BulmaAccordionItem,
-    },
+        BulmaAccordionItem
+    }
 }
 ```
+
 ## Browser
 
 ```html
@@ -67,45 +76,48 @@ Vue.component('bulma-accordion-item', VueBulmaAccordion.BulmaAccordionItem)
 
 # Usage
 
-Put a `<BulmaAccordion>` item on your page. There are a few options for the accordion, though they have sensible defaults if you dont want to change anything: 
-1. dropdown
-    * Boolean
-    * If `true`, allows any number of items to be expanded simultaneously, rather than only 1 at a time
-2. icon
-    * String
-    * The icon on the right hand side of the title bar
-    * There are 3 options
-        * `'caret'`
-        * `'plus-minus'`
-        * `'custom'` - with this selected, you can provide your own icon in a slot, inside each accordion item. Either provide one icon in the `'icon'` slot, or a separate icon for when that accordion item is open or closed, in the `'icon-open'` and `'icon-closed'` slots
-        
-3. caretAnimation
-    * Object
-        * duration: String - CSS valid duration, like `'450ms'`
-        * timerFunc: String - CSS valid timer function, like `'ease'`
-        * none: Boolean - set to false to disable animation
-    * If you select the 'caret' icon, this tunes the animation
-        * 'none' - the default. The arrow simply switches instantly
-        * 'spin' - the arrow rotates and expands slightly
-4. slide
-    * Object
-        * duration: String - CSS valid duration, like `'700ms'`
-        * timerFunc: String - CSS valid timer function, like `'ease'`
-    * Allows configuration of the slide animation for each accordion item
+Put a `<BulmaAccordion>` item on your page. There are a few options for the accordion, though they have sensible defaults if you dont want to change anything:
+
+1.  dropdown
+    *   Boolean
+    *   If `true`, allows any number of items to be expanded simultaneously, rather than only 1 at a time
+2.  icon
+    *   String
+    *   The icon on the right hand side of the title bar
+    *   There are 3 options
+        *   `'caret'`
+        *   `'plus-minus'`
+        *   `'custom'` - with this selected, you can provide your own icon in a slot, inside each accordion item. Either provide one icon in the `'icon'` slot, or a separate icon for when that accordion item is open or closed, in the `'icon-open'` and `'icon-closed'` slots
+3.  caretAnimation
+    *   Object
+        *   duration: String - CSS valid duration, like `'450ms'`
+        *   timerFunc: String - CSS valid timer function, like `'ease'`
+        *   none: Boolean - set to false to disable animation
+    *   If you select the 'caret' icon, this tunes the animation
+        *   'none' - the default. The arrow simply switches instantly
+        *   'spin' - the arrow rotates and expands slightly
+4.  slide
+    *   Object
+        *   duration: String - CSS valid duration, like `'700ms'`
+        *   timerFunc: String - CSS valid timer function, like `'ease'`
+    *   Allows configuration of the slide animation for each accordion item
 
 Fill the `<BulmaAccordion>` with as many `<BulmaAccordionItem>` components as you need. Each of the `<BulmaAccordionItem>` components has 3 slots, if you're not using a custom icon:
-1. `title` - I've found `<h4 class="title is-4 has-text-weight-normal" slot="title">The Title</h4>` to look quite nice
-2. `content`
-3. `footer`
+
+1.  `title` - I've found `<h4 class="title is-4 has-text-weight-normal" slot="title">The Title</h4>` to look quite nice
+2.  `content`
+3.  `footer`
 
 There are a further 3 slots for custom icons:
-1. `icon` - when you just want 1 icon, DON'T USE WITH `icon-open` and `icon-closed`
-2. `icon-open` - the icon shown when the `<BulmaAccordionItem>` is open
-3. `icon-closed` - the icon shown when the `<BulmaAccordionItem>` is closed
+
+1.  `icon` - when you just want 1 icon, DON'T USE WITH `icon-open` and `icon-closed`
+2.  `icon-open` - the icon shown when the `<BulmaAccordionItem>` is open
+3.  `icon-closed` - the icon shown when the `<BulmaAccordionItem>` is closed
 
 # Examples
 
 ## Using built in icons
+
 ```html
 <BulmaAccordion
 :dropdown="true"
@@ -135,7 +147,9 @@ There are a further 3 slots for custom icons:
 ```
 
 ## Using custom icons
+
 The icons used here are from https://material.io/icons/
+
 ```html
 <BulmaAccordion
 :dropdown="false"
@@ -211,5 +225,5 @@ npm run build
 [MIT](http://opensource.org/licenses/MIT)
 
 ## Credits
-Caret icon made by Appzgear on www.flaticon.com, licensed by CC 3.0 BY
 
+Caret icon made by Appzgear on www.flaticon.com, licensed by CC 3.0 BY

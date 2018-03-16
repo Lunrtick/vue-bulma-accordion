@@ -10,7 +10,8 @@
     width: 100%;
 }
 
-.horizontal, .vertical {
+.horizontal,
+.vertical {
     position: absolute;
     border-radius: 3px;
     background: rgb(100, 100, 100);

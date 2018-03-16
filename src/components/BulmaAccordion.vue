@@ -13,48 +13,48 @@ export default {
             type: Object,
             default: () => ({
                 duration: '450ms',
-                timerFunc: 'ease',
+                timerFunc: 'ease'
             }),
-            validator: (config) => {
+            validator: config => {
                 const isValid =
                     (typeof config.duration === 'string' &&
-                    typeof config.timerFunc === 'string') ||
+                        typeof config.timerFunc === 'string') ||
                     config.none === true
                 return isValid
-            },
+            }
         },
         dropdown: {
             required: false,
             type: Boolean,
-            default: false,
+            default: false
         },
         icon: {
             required: false,
             type: String,
             default: 'caret',
-            validator: (choice) => {
+            validator: choice => {
                 const isValid =
                     choice === 'caret' ||
                     choice === 'plus-minus' ||
                     choice === 'custom'
                 return isValid
-            },
+            }
         },
         slide: {
             required: false,
             type: Object,
             default: () => ({
                 duration: '700ms',
-                timerFunc: 'ease',
+                timerFunc: 'ease'
             }),
-            validator: (config) => {
+            validator: config => {
                 const isValid =
                     typeof config.duration === 'string' &&
                     typeof config.timerFunc === 'string'
                 return isValid
-            },
-        },
-    },
+            }
+        }
+    }
 }
 </script>
 

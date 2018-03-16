@@ -1,15 +1,12 @@
 import BulmaAccordion from './components/BulmaAccordion.vue'
 import BulmaAccordionItem from './components/BulmaAccordionItem.vue'
 
-export function install (Vue) {
+export function install(Vue) {
     Vue.component('bulma-accordion', BulmaAccordion)
     Vue.component('bulma-accordion-item', BulmaAccordionItem)
 }
 
-export {
-    BulmaAccordion,
-    BulmaAccordionItem,
-}
+export { BulmaAccordion, BulmaAccordionItem }
 
 /* -- Plugin definition & Auto-install -- */
 
@@ -17,7 +14,7 @@ export {
 const plugin = {
     /* eslint-disable no-undef */
     version: VERSION,
-    install,
+    install
 }
 
 export default plugin

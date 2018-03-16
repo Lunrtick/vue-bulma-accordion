@@ -32,12 +32,12 @@ import Caret from '../icons/caret.svg'
 import PlusMinus from './PlusMinus.vue'
 
 // got this from https://stackoverflow.com/a/9090128, tidied it up somewhat
-function transitionEndEventName (el) {
+function transitionEndEventName(el) {
     const transitions = {
-        'transition': 'transitionend',
-        'OTransition': 'otransitionend',  // oTransitionEnd in very old Opera
-        'MozTransition': 'transitionend',
-        'WebkitTransition': 'webkitTransitionEnd',
+        transition: 'transitionend',
+        OTransition: 'otransitionend', // oTransitionEnd in very old Opera
+        MozTransition: 'transitionend',
+        WebkitTransition: 'webkitTransitionEnd'
     }
     for (const t in transitions) {
         if (transitions.hasOwnProperty(t) && el.style[t] !== undefined) {
@@ -51,20 +51,20 @@ export default {
     name: 'bulma-accordion-item',
     components: {
         Caret,
-        PlusMinus,
+        PlusMinus
     },
-    data () {
+    data() {
         return {
             isOpen: false,
             autoHeightInterval: null,
-            showCardContent: false,
+            showCardContent: false
         }
     },
-    mounted () {
+    mounted() {
         this.$parent.$on('toggle', this.collapse)
         const accordionBody = this.$refs.body
         const eName = transitionEndEventName(accordionBody)
-        accordionBody.addEventListener(eName, (e) => {
+        accordionBody.addEventListener(eName, e => {
             if (accordionBody.style.height !== '0px') {
                 this.autoHeightStart(accordionBody)
             } else {
@@ -73,133 +73,144 @@ export default {
             }
         })
     },
-    destroyed () {
+    destroyed() {
         this.$parent.$off('toggle')
     },
     watch: {
-        isOpen (isOpen) {
+        isOpen(isOpen) {
             this.doTheSlide()
-        },
+        }
     },
     computed: {
-        config () {
+        config() {
             const {
                 caretAnimation: animation = {
                     duration: '450ms',
-                    timerFunc: 'ease',
+                    timerFunc: 'ease'
                 },
                 dropdown = false,
                 icon = 'caret',
                 slide = {
                     duration: '700ms',
-                    timerFunc: 'ease',
-                },
+                    timerFunc: 'ease'
+                }
             } = this.$parent
             return {
                 animation,
                 dropdown,
                 icon,
-                slide,
+                slide
             }
         },
-        dropdownIconClasses () {
+        dropdownIconClasses() {
             return {
                 'header-icon': true,
-                'caret-down': !this.isOpen,
+                'caret-down': !this.isOpen
             }
         },
-        card_classes () {
+        card_classes() {
             return {
-                'card': true,
-                'card-active': this.isOpen,
+                card: true,
+                'card-active': this.isOpen
             }
         },
-        card_content_classes () {
+        card_content_classes() {
             return {
                 'card-content': true,
-                'is-hidden': !this.showCardContent,
+                'is-hidden': !this.showCardContent
             }
         },
-        footerClasses () {
+        footerClasses() {
             return {
                 'card-footer': true,
-                'is-hidden': !this.$slots.footer,
+                'is-hidden': !this.$slots.footer
             }
         },
-        usingCustomIcon () {
+        usingCustomIcon() {
             return this.config.icon === 'custom'
         },
-        showCaret () {
+        showCaret() {
             return this.config.icon === 'caret'
         },
-        showPlus () {
+        showPlus() {
             return this.config.icon === 'plus-minus' && !this.isOpen
         },
-        showMinus () {
+        showMinus() {
             return this.config.icon === 'plus-minus' && this.isOpen
         },
-        slideStyle () {
+        slideStyle() {
             const c = this.config.slide
             return {
-                'transition': `all ${c.duration} ${c.timerFunc}`,
+                transition: `all ${c.duration} ${c.timerFunc}`
             }
         },
-        iconStyle () {
+        iconStyle() {
             const c = this.config.animation
             if (c.none === true) {
                 return {}
             }
             return {
-                'transition': `all ${c.duration} ${c.timerFunc}`,
+                transition: `all ${c.duration} ${c.timerFunc}`
             }
-        },
+        }
     },
     methods: {
-        collapse () {
+        collapse() {
             this.isOpen = false
         },
-        toggleCollapsed () {
-            if (!this.isOpen && !this.config.dropdown) this.$parent.$emit('toggle')
+        toggleCollapsed() {
+            if (!this.isOpen && !this.config.dropdown) {
+                this.$parent.$emit('toggle')
+            }
             this.isOpen = !this.isOpen
         },
-        doTheSlide () {
+        doTheSlide() {
             const el = this.$refs.body
             if (this.isOpen === true) {
                 this.showCardContent = true
-                this.$nextTick()
-                    .then(() => {
-                        this.adjustHeight(el, el.scrollHeight)
-                    })
+                this.$nextTick().then(() => {
+                    this.adjustHeight(el, el.scrollHeight)
+                })
             } else {
                 this.slideUp(el)
             }
         },
-        adjustHeight (el, newHeight) {
+        adjustHeight(el, newHeight) {
             el.style.height = `${newHeight}px`
         },
-        slideUp (el) {
+        slideUp(el) {
             if (el.style.height === 'auto') {
                 el.style.height = `${el.scrollHeight}px`
             }
             el.style.height = '0px'
         },
-        autoHeightStart (el) {
-            window.mySpecialEl = el
+        autoHeightStart(el) {
             // clear running interval
             if (this.autoHeightInterval) this.autoHeightStop()
             this.autoHeightInterval = setInterval(() => {
                 // set height for comparison to scrollHeight
-                const actualHeight = this.$refs.bodyContent.scrollHeight + this.$refs.bodyFooter.scrollHeight + 1
-                if (el.style.height !== '0px' && actualHeight !== el.style.height && this.isOpen) {
-                    this.adjustHeight(el, actualHeight)
+                try {
+                    const actualHeight =
+                        this.$refs.bodyContent.scrollHeight +
+                        this.$refs.bodyFooter.scrollHeight +
+                        1
+                    if (
+                        el.style.height !== '0px' &&
+                        actualHeight !== el.style.height &&
+                        this.isOpen
+                    ) {
+                        this.adjustHeight(el, actualHeight)
+                    }
+                } catch (e) {
+                    this.autoHeightStop()
                 }
             }, 100)
         },
-        autoHeightStop () {
+        autoHeightStop() {
             clearInterval(this.autoHeightInterval)
             this.autoHeightInterval = null
-        },
-    },
+        }
+    }
 }
 </script>
 

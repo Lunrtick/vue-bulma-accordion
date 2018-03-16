@@ -10,22 +10,23 @@ export default {
     props: {
         minus: {
             required: true,
-            type: Boolean,
-        },
+            type: Boolean
+        }
     },
     computed: {
-        verticalClasses () {
+        verticalClasses() {
             return {
-                'vertical': true,
-                'vertical-rotated': this.minus,
+                vertical: true,
+                'vertical-rotated': this.minus
             }
-        },
-    },
+        }
+    }
 }
 </script>
 
 <style>
-.horizontal, .vertical {
+.horizontal,
+.vertical {
     position: absolute;
     border-radius: 3px;
     background: rgb(100, 100, 100);
