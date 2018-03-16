@@ -2,7 +2,7 @@
     "name": "vue-bulma-accordion",
     "description":
         "A simple, easily configurable accordion or collapsible for Vue, styled with Bulma",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "author": {
         "name": "Gabriel Soicher",
         "email": "gabe@underware.co.za"

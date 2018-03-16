@@ -1,6 +1,6 @@
 # vue-bulma-accordion
 
-[![npm](https://img.shields.io/npm/v/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dm/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dt/express.svg)](https://www.npmjs.com/package/vue-bulma-accordion)
+[![npm](https://img.shields.io/npm/v/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dm/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dt/vue-bulma-accordion.svg)](https://www.npmjs.com/package/vue-bulma-accordion)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 A simple, easily configurable accordion or collapsible for Vue, styled with Bulma.
