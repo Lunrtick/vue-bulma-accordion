@@ -1,0 +1,6 @@
+{
+    "prettier.eslintIntegration": false,
+    "prettier.semi": false,
+    "prettier.singleQuote": true,
+    "vetur.format.defaultFormatter.js": "prettier-eslint"
+}

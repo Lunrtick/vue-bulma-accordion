@@ -1,25 +1,20 @@
 import BulmaAccordion from './components/BulmaAccordion.vue'
 import BulmaAccordionItem from './components/BulmaAccordionItem.vue'
 
+// Declare install function executed by Vue.use()
 export function install(Vue) {
+    if (install.installed) return
+    install.installed = true
     Vue.component('bulma-accordion', BulmaAccordion)
     Vue.component('bulma-accordion-item', BulmaAccordionItem)
 }
 
 export { BulmaAccordion, BulmaAccordionItem }
 
-/* -- Plugin definition & Auto-install -- */
-
-// Plugin
 const plugin = {
-    /* eslint-disable no-undef */
-    version: VERSION,
     install
 }
 
-export default plugin
-
-// Auto-install
 let GlobalVue = null
 if (typeof window !== 'undefined') {
     GlobalVue = window.Vue
@@ -29,3 +24,4 @@ if (typeof window !== 'undefined') {
 if (GlobalVue) {
     GlobalVue.use(plugin)
 }
+export default plugin

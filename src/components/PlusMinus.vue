@@ -17,14 +17,14 @@ export default {
         verticalClasses() {
             return {
                 vertical: true,
-                'vertical-rotated': this.minus
-            }
+                "vertical-rotated": this.minus
+            };
         }
     }
-}
+};
 </script>
 
-<style>
+<style scoped>
 .horizontal,
 .vertical {
     position: absolute;
