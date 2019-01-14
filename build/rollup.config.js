@@ -4,6 +4,7 @@ import buble from 'rollup-plugin-buble'
 import replace from 'rollup-plugin-replace'
 import uglify from 'rollup-plugin-uglify-es'
 import minimist from 'minimist'
+import commonjs from 'rollup-plugin-commonjs';
 
 const argv = minimist(process.argv.slice(2))
 
@@ -23,7 +24,8 @@ const config = {
                 isProduction: true
             }
         }),
-        buble()
+        buble(),
+	commonjs({'../src/entry.js': ['BulmaAccordion', 'BulmaAccordionItem']})
     ]
 }
 
