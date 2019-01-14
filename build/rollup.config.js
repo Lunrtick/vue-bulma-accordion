@@ -1,60 +1,35 @@
+// rollup.config.js
 import vue from 'rollup-plugin-vue'
 import buble from 'rollup-plugin-buble'
-import minify from 'rollup-plugin-babel-minify'
-import css from 'rollup-plugin-css-only'
-export default [
-    {
-        input: 'src/wrapper.js',
-        output: {
-            name: 'BulmaAccordion',
-            format: 'umd',
-            file: 'dist/vue-bulma-accordion.umd.js',
-            exports: 'named'
-        },
-        plugins: [
-            vue({
-                css: true
-            }),
-            minify({ comments: false })
-        ],
-        external: [
-            'Vue',
-            'vue',
-            'vue-runtime-helpers/normalize-component.js',
-            'vue-runtime-helpers/inject-style/browser.js'
-        ]
+import replace from 'rollup-plugin-replace'
+import uglify from 'rollup-plugin-uglify-es'
+import minimist from 'minimist'
+
+const argv = minimist(process.argv.slice(2))
+
+const config = {
+    input: 'src/entry.js',
+    output: {
+        name: 'BulmaAccordion'
     },
-    {
-        input: 'src/wrapper.js',
-        output: {
-            name: 'BulmaAccordion',
-            format: 'esm',
-            file: 'dist/vue-bulma-accordion.mjs',
-            exports: 'named'
-        },
-        plugins: [vue({ css: true, compileTemplate: true }), buble()],
-        external: ['Vue', 'vue']
-    },
-    {
-        input: 'src/wrapper.js',
-        output: {
-            name: 'BulmaAccordion',
-            format: 'iife',
-            file: 'dist/vue-bulma-accordion.min.js',
-            exports: 'named'
-        },
-        plugins: [
-            vue({
-                css: true
-            }),
-            buble(),
-            minify({ comments: false })
-        ],
-        external: [
-            'Vue',
-            'vue',
-            'vue-runtime-helpers/normalize-component.js',
-            'vue-runtime-helpers/inject-style/browser.js'
-        ]
-    }
-]
+    plugins: [
+        replace({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        vue({
+            css: true,
+            compileTemplate: true,
+            template: {
+                isProduction: true
+            }
+        }),
+        buble()
+    ]
+}
+
+// Only minify browser (iife) version
+if (argv.format === 'iife') {
+    config.plugins.push(uglify())
+}
+
+export default config

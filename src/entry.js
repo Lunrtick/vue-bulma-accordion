@@ -1,12 +1,16 @@
-import BulmaAccordion from './components/BulmaAccordion.vue'
-import BulmaAccordionItem from './components/BulmaAccordionItem.vue'
+import * as components from './components'
 
 // Declare install function executed by Vue.use()
 export function install(Vue) {
     if (install.installed) return
     install.installed = true
-    Vue.component('bulma-accordion', BulmaAccordion)
-    Vue.component('bulma-accordion-item', BulmaAccordionItem)
+    Object.keys(components).forEach(componentName => {
+        Vue.component(componentName, components[componentName])
+    })
+}
+
+const plugin = {
+    install
 }
 
 let GlobalVue = null
@@ -19,7 +23,7 @@ if (GlobalVue) {
     GlobalVue.use(plugin)
 }
 
-export default {
-    BulmaAccordion,
-    BulmaAccordionItem
-}
+export * from './components'
+
+export const BulmaAccordion = components.BulmaAccordion
+export const BulmaAccordionItem = components.BulmaAccordionItem
