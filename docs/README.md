@@ -1,11 +1,12 @@
-# vue-bulma-accordion
+# Vue Bulma Accordion
 
 [![npm](https://img.shields.io/npm/v/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dm/vue-bulma-accordion.svg) ![npm](https://img.shields.io/npm/dt/vue-bulma-accordion.svg)](https://www.npmjs.com/package/vue-bulma-accordion)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 A simple, easily configurable accordion or collapsible for Vue, styled with Bulma.
 
-Full docs [here](https://lunrtick.github.io/vue-bulma-accordion/)
+<iframe height='450' scrolling='no' title='Vue Bulma Accordion - Basic' src='//codepen.io/lunrtick/embed/jXdJWd/?height=265&theme-id=0&default-tab=result' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/lunrtick/pen/jXdJWd/'>Vue Bulma Accordion - Basic</a> by Gabriel Soicher (<a href='https://codepen.io/lunrtick'>@lunrtick</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 
 ## New in 0.4.0
 
@@ -30,21 +31,35 @@ $ npm install --save bulma
 
 ## Import
 
-Single File Component:
+### Single File Component:
 
 ```javascript
-import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion'
+import { BulmaAccordion, BulmaAccordionItem } from "vue-bulma-accordion";
 
 export default {
-    name: 'cool-component',
+    name: "cool-component",
     data() {
-        return {}
+        return {};
     },
     components: {
         BulmaAccordion,
         BulmaAccordionItem
     }
-}
+};
+```
+
+### Browser:
+
+```html
+<div id="app">
+    <bulma-accordion>
+        <bulma-accordion-item> <p slot="title">Title</p> </bulma-accordion-item>
+    </bulma-accordion>
+</div>
+<!-- Installation should happen automatically
+    simply add the script tag after Vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-bulma-accordion"></script>
 ```
 
 # Usage
@@ -98,70 +113,17 @@ There are a further 3 slots for custom icons:
 
 # Examples
 
-## Using built in icons
+## Dropdown mode + plus-minus + 2 initial-open-items
 
-```vue
-<BulmaAccordion
-    dropdown
-    :icon="'caret'"
-    :caretAnimation="{
-        duration: '.6s',
-        timerFunc: 'ease-in-out'
-    }"
-    :slide="{
-        duration: '.9s',
-        timerFunc: 'ease'
-    }"
->
-    <!-- The wrapper component for all the items -->
-    <BulmaAccordionItem>
-        <h4 slot="title">Just a title</h4>
-    </BulmaAccordionItem>
-    <!-- add as many of these items as you need - fill them with content via the slots -->
-    <BulmaAccordionItem>
-        <h4 slot="title">A title with content</h4>
-        <p slot="content">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eos
-            illo expedita asperiores rem iure aliquid dolore, pariatur
-            dignissimos, minima inventore? Minima voluptatum nulla, error omnis
-            laboriosam voluptatibus rem aperiam.
-        </p>
-    </BulmaAccordionItem>
-    <BulmaAccordionItem>
-        <h4 slot="title">All of it</h4>
-        <p slot="content">boo</p>
-        <button class="button is-primary" slot="footer">Click Me!</button>
-    </BulmaAccordionItem>
-</BulmaAccordion>
-```
+<iframe height='450' scrolling='no' title='KbJLBB' src='//codepen.io/lunrtick/embed/KbJLBB/?height=265&theme-id=0&default-tab=result' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/lunrtick/pen/KbJLBB/'>KbJLBB</a> by Gabriel Soicher (<a href='https://codepen.io/lunrtick'>@lunrtick</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 
 ## Using custom icons
 
 The icons used here are from https://material.io/icons/
 
-```vue
-<BulmaAccordion :dropdown="false" :icon="'custom'">
-    <!-- The wrapper component for all the items -->
-    <BulmaAccordionItem>
-        <p class="title is-4 has-text-weight-normal" slot="title">Title</p>
-        <i slot="icon" class="material-icons">more_vert</i>
-        <div class="high" slot="content"><p>This is a div with content</p></div>
-        <button class="button is-primary" slot="footer">Click Me!</button>
-    </BulmaAccordionItem>
-    <!-- add as many of these items as you need - fill them with content via the slots -->
-    <BulmaAccordionItem>
-        <h4 slot="title">A title with content</h4>
-        <i slot="icon-closed" class="material-icons">flight_takeoff</i>
-        <i slot="icon-open" class="material-icons">flight_land</i>
-        <p slot="content">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eos
-            illo expedita asperiores rem iure aliquid dolore, pariatur
-            dignissimos, minima inventore? Minima voluptatum nulla, error omnis
-            laboriosam voluptatibus rem aperiam.
-        </p>
-    </BulmaAccordionItem>
-</BulmaAccordion>
-```
+<iframe height='450' scrolling='no' title='qLgGvO' src='//codepen.io/lunrtick/embed/qLgGvO/?height=265&theme-id=0&default-tab=result' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/lunrtick/pen/qLgGvO/'>qLgGvO</a> by Gabriel Soicher (<a href='https://codepen.io/lunrtick'>@lunrtick</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 
 ## License
 
