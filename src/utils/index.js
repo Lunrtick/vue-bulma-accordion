@@ -5,11 +5,11 @@ export function transitionEndEventName(el) {
         OTransition: 'otransitionend', // oTransitionEnd in very old Opera
         MozTransition: 'transitionend',
         WebkitTransition: 'webkitTransitionEnd'
-    }
+    };
     for (const t in transitions) {
         if (transitions.hasOwnProperty(t) && el.style[t] !== undefined) {
-            return transitions[t]
+            return transitions[t];
         }
     }
-    throw new Error('TransitionEnd event is not supported in this browser')
+    throw new Error('TransitionEnd event is not supported in this browser');
 }
