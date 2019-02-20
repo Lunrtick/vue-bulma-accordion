@@ -1,6 +1,13 @@
 config/
 node_modules/
+src/
+build/
+docs/
+.vscode/
 .eslintignore
 .eslitnrc.js
 .gitignore
-src/
+.babelrc
+browserlist
+*.sh
+yarn.lock

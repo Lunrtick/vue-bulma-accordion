@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import EventBus from "../EventBus.js";
 export default {
     name: "bulma-accordion",
     props: {
@@ -69,7 +68,7 @@ export default {
         }
     },
     mounted() {
-        EventBus.$on("click", this.handleChildClicked);
+        this.$on("child-clicked", this.handleChildClicked);
         this.$nextTick(() => {
             this.$children.forEach((child, idx) => {
                 const id = String(idx);
@@ -81,6 +80,7 @@ export default {
     },
     data() {
         return {
+            uniqueId: null,
             children_toggle_status: {}
         };
     },
@@ -89,14 +89,14 @@ export default {
             if (!this.dropdown) {
                 for (const id in this.children_toggle_status) {
                     if (this.children_toggle_status[id] && id !== child_id) {
-                        EventBus.$emit("toggle", id);
+                        this.$emit("toggle-child", id);
                         this.children_toggle_status[id] = false;
                     }
                 }
             }
             this.children_toggle_status[child_id] = !this
                 .children_toggle_status[child_id];
-            EventBus.$emit("toggle", child_id);
+            this.$emit("toggle-child", child_id);
         },
         openInitialItems(items_length) {
             const i = this.initialOpenItem;

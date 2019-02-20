@@ -1,8 +1,10 @@
-import Vue from 'vue';
-
-var EventBus = new Vue();
-
 //
+//
+//
+//
+//
+//
+
 var script = {
     name: "bulma-accordion",
     props: {
@@ -67,7 +69,7 @@ var script = {
     mounted: function mounted() {
         var this$1 = this;
 
-        EventBus.$on("click", this.handleChildClicked);
+        this.$on("child-clicked", this.handleChildClicked);
         this.$nextTick(function () {
             this$1.$children.forEach(function (child, idx) {
                 var id = String(idx);
@@ -79,6 +81,7 @@ var script = {
     },
     data: function data() {
         return {
+            uniqueId: null,
             children_toggle_status: {}
         };
     },
@@ -87,14 +90,14 @@ var script = {
             if (!this.dropdown) {
                 for (var id in this.children_toggle_status) {
                     if (this.children_toggle_status[id] && id !== child_id) {
-                        EventBus.$emit("toggle", id);
+                        this.$emit("toggle-child", id);
                         this.children_toggle_status[id] = false;
                     }
                 }
             }
             this.children_toggle_status[child_id] = !this
                 .children_toggle_status[child_id];
-            EventBus.$emit("toggle", child_id);
+            this.$emit("toggle-child", child_id);
         },
         openInitialItems: function openInitialItems(items_length) {
             var this$1 = this;
@@ -385,7 +388,7 @@ var script$2 = {
     mounted: function mounted() {
         var this$1 = this;
 
-        EventBus.$on("toggle", this.handleToggleRequest);
+        this.$parent.$on("toggle-child", this.handleToggleRequest);
 
         var accordionBody = this.$refs.body;
         var eName = transitionEndEventName(accordionBody);
@@ -399,10 +402,15 @@ var script$2 = {
         });
     },
     destroyed: function destroyed() {
-        EventBus.$off("toggle");
+        this.$parent.$off("toggle-child");
     },
     watch: {
-        isOpen: function isOpen(isOpen$1) {
+        isOpen: function isOpen(newStatus) {
+            if (newStatus) {
+                this.$emit("open");
+            } else {
+                this.$emit("close");
+            }
             this.doTheSlide();
         }
     },
@@ -489,7 +497,7 @@ var script$2 = {
         },
         notifyOfClick: function notifyOfClick() {
             if (this.uniqueId) {
-                EventBus.$emit("click", this.uniqueId);
+                this.$parent.$emit("child-clicked", this.uniqueId);
             }
         },
         collapse: function collapse() {
@@ -561,11 +569,11 @@ var __vue_staticRenderFns__$2 = [];
   /* style */
   var __vue_inject_styles__$2 = function (inject) {
     if (!inject) { return }
-    inject("data-v-118bda53_0", { source: ".accordion-body[data-v-118bda53]{height:0;overflow:hidden}.caret-down[data-v-118bda53]{transform:rotate(180deg)}.header-icon[data-v-118bda53]{width:100%}", map: undefined, media: undefined });
+    inject("data-v-0d986444_0", { source: ".accordion-body[data-v-0d986444]{height:0;overflow:hidden}.caret-down[data-v-0d986444]{transform:rotate(180deg)}.header-icon[data-v-0d986444]{width:100%}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  var __vue_scope_id__$2 = "data-v-118bda53";
+  var __vue_scope_id__$2 = "data-v-0d986444";
   /* module identifier */
   var __vue_module_identifier__$2 = undefined;
   /* functional template */
@@ -708,11 +716,11 @@ var components = /*#__PURE__*/Object.freeze({
 });
 
 // Declare install function executed by Vue.use()
-function install(Vue$$1) {
+function install(Vue) {
     if (install.installed) { return }
     install.installed = true;
     Object.keys(components).forEach(function (componentName) {
-        Vue$$1.component(componentName, components[componentName]);
+        Vue.component(componentName, components[componentName]);
     });
 }
 

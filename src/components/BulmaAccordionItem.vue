@@ -34,7 +34,6 @@
 <script>
 import PlusMinus from "./PlusMinus.vue";
 import { transitionEndEventName } from "../utils/index.js";
-import EventBus from "../EventBus.js";
 export default {
     name: "bulma-accordion-item",
     components: {
@@ -49,7 +48,7 @@ export default {
         };
     },
     mounted() {
-        EventBus.$on("toggle", this.handleToggleRequest);
+        this.$parent.$on("toggle-child", this.handleToggleRequest);
 
         const accordionBody = this.$refs.body;
         const eName = transitionEndEventName(accordionBody);
@@ -63,10 +62,15 @@ export default {
         });
     },
     destroyed() {
-        EventBus.$off("toggle");
+        this.$parent.$off("toggle-child");
     },
     watch: {
-        isOpen(isOpen) {
+        isOpen(newStatus) {
+            if (newStatus) {
+                this.$emit("open");
+            } else {
+                this.$emit("close");
+            }
             this.doTheSlide();
         }
     },
@@ -154,7 +158,7 @@ export default {
         },
         notifyOfClick() {
             if (this.uniqueId) {
-                EventBus.$emit("click", this.uniqueId);
+                this.$parent.$emit("child-clicked", this.uniqueId);
             }
         },
         collapse() {
