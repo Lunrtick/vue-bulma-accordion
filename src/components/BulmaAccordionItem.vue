@@ -1,34 +1,43 @@
 <template>
-    <div :class="card_classes">
-        <div class="card-header" @click="notifyOfClick">
-            <p class="card-header-title">
-                <slot name="title"></slot>
-            </p>
-            <p class="card-header-icon">
-                <span v-if="!usingCustomIcon" class="icon">
-                    <svg v-if="showCaret" :class="dropdownIconClasses" :style="iconStyle" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129">
-                        <g>
-                            <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"/>
-                        </g>
-                    </svg>
-                    <PlusMinus v-if="showPlus || showMinus" :minus="showMinus"/>
-                </span>
-                <span v-else class="icon">
-                    <slot name="icon"></slot>
-                    <slot v-if="isOpen" name="icon-open"></slot>
-                    <slot v-else name="icon-closed"></slot>
-                </span>
-            </p>
-        </div>
-        <div class="accordion-body" ref="body" :style="slideStyle">
-            <div :class="card_content_classes" ref="bodyContent">
-                <slot name="content"></slot>
-            </div>
-            <div :class="footerClasses" ref="bodyFooter">
-                <slot name="footer"></slot>
-            </div>
-        </div>
+  <div :class="card_classes">
+    <div class="card-header" @click="notifyOfClick">
+      <p class="card-header-title">
+        <slot name="title"></slot>
+      </p>
+      <p class="card-header-icon">
+        <span v-if="!usingCustomIcon" class="icon">
+          <svg
+            v-if="showCaret"
+            :class="dropdownIconClasses"
+            :style="iconStyle"
+            version="1.1"
+            viewBox="0 0 129 129"
+            enable-background="new 0 0 129 129"
+          >
+            <g>
+              <path
+                d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+              ></path>
+            </g>
+          </svg>
+          <PlusMinus v-if="showPlus || showMinus" :minus="showMinus"/>
+        </span>
+        <span v-else class="icon">
+          <slot name="icon"></slot>
+          <slot v-if="isOpen" name="icon-open"></slot>
+          <slot v-else name="icon-closed"></slot>
+        </span>
+      </p>
     </div>
+    <div class="accordion-body" ref="body" :style="slideStyle">
+      <div :class="card_content_classes" ref="bodyContent">
+        <slot name="content"></slot>
+      </div>
+      <div :class="footerClasses" ref="bodyFooter">
+        <slot name="footer"></slot>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -48,21 +57,24 @@ export default {
         };
     },
     mounted() {
-        this.$parent.$on("toggle-child", this.handleToggleRequest);
+        this.$nextTick(() => {
+            this.$parent.$emit("child-registered", this);
+            this.$parent.$on("toggle-child", this.handleToggleRequest);
 
-        const accordionBody = this.$refs.body;
-        const eName = transitionEndEventName(accordionBody);
-        accordionBody.addEventListener(eName, e => {
-            if (accordionBody.style.height !== "0px") {
-                this.autoHeightStart(accordionBody);
-            } else {
-                this.autoHeightStop();
-                this.showCardContent = false;
-            }
+            const accordionBody = this.$refs.body;
+            const eName = transitionEndEventName(accordionBody);
+            accordionBody.addEventListener(eName, (e) => {
+                if (accordionBody.style.height !== "0px") {
+                    this.autoHeightStart(accordionBody);
+                } else {
+                    this.autoHeightStop();
+                    this.showCardContent = false;
+                }
+            });
         });
     },
-    destroyed() {
-        this.$parent.$off("toggle-child");
+    beforeDestroy() {
+        this.$parent.$emit("child-removed", this.uniqueId);
     },
     watch: {
         isOpen(newStatus) {

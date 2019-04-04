@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="/dist/vue-bulma-accordion.min.js"></script>
+        <title>Test Bulma Accordion</title>
+    </head>
+    <body>
+        <div id="app">
+            <p class="title is-3">
+                Basic Example
+            </p>
+            <button class="button is-primary" @click="addItem">add</button>
+            <bulma-accordion initial-open-item="2">
+                <!-- The wrapper component for all the items -->
+                <bulma-accordion-item>
+                    <h4 slot="title">Just a title</h4>
+                </bulma-accordion-item>
+                <!-- add as many of these items as you need - fill them with content via the slots -->
+                <bulma-accordion-item v-for="(i, idx) in items" :key="i.title">
+                    <h4 slot="title">{{ i.title }}</h4>
+                    <p slot="content">
+                        {{ i.content }}
+                        <button
+                            class="button is-danger"
+                            @click="removeItem(idx)"
+                        >
+                            Remove
+                        </button>
+                    </p>
+                </bulma-accordion-item>
+                <bulma-accordion-item>
+                    <h4 slot="title">Auto-Resize!</h4>
+                    <div slot="content">
+                        <p
+                            v-for="(c, idx) in body_content"
+                            :key="idx"
+                            class="body-content"
+                        >
+                            {{ c }}
+                        </p>
+                    </div>
+                    <button
+                        class="button is-primary"
+                        slot="footer"
+                        @click="addContent"
+                    >
+                        Add content...
+                    </button>
+                </bulma-accordion-item>
+            </bulma-accordion>
+        </div>
+        <script>
+            const app = new Vue({
+                el: "#app",
+                data: {
+                    body_content: ["Content"],
+                    items: [{ title: "abc", content: "123" }]
+                },
+                methods: {
+                    addContent() {
+                        this.body_content.push("More Content");
+                    },
+                    addItem() {
+                        this.items.push({
+                            title: Math.random().toFixed(5),
+                            content: Math.random()
+                        });
+                    },
+                    removeItem(idx) {
+                        this.items.splice(idx, 1);
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

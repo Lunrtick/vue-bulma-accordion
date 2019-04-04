@@ -2,5 +2,7 @@
     "prettier.eslintIntegration": false,
     "prettier.semi": false,
     "prettier.singleQuote": true,
-    "vetur.format.defaultFormatter.js": "prettier-eslint"
+    "vetur.format.defaultFormatter.js": "prettier-eslint",
+    "editor.formatOnSave": true,
+    "file-size.position": "left"
 }

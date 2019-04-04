@@ -23,7 +23,8 @@
                 required: false,
                 type: Array,
                 default: null,
-                validator: function (items) { return Array.isArray(items) && !items.some(function (n) { return typeof n !== "number"; }); }
+                validator: function (items) { return Array.isArray(items) &&
+                    !items.some(function (n) { return typeof n !== "number"; }); }
             },
             caretAnimation: {
                 required: false,
@@ -75,23 +76,31 @@
         mounted: function mounted() {
             var this$1 = this;
 
+            this.$on("child-registered", function (child) {
+                var id = this$1.getNextId();
+                child.setUniqueId(id);
+                this$1.children_toggle_status[id] = false;
+            });
             this.$on("child-clicked", this.handleChildClicked);
+            this.$on("child-removed", function (child_id) {
+                delete this$1.children_toggle_status[child_id];
+            });
             this.$nextTick(function () {
-                this$1.$children.forEach(function (child, idx) {
-                    var id = String(idx);
-                    child.setUniqueId(id);
-                    this$1.children_toggle_status[id] = false;
-                });
                 this$1.openInitialItems(this$1.$children.length);
             });
         },
         data: function data() {
             return {
-                uniqueId: null,
+                next_id: 1,
                 children_toggle_status: {}
             };
         },
         methods: {
+            getNextId: function getNextId() {
+                var v = this.next_id.toString(10);
+                this.next_id += 1;
+                return v;
+            },
             handleChildClicked: function handleChildClicked(child_id) {
                 if (!this.dropdown) {
                     for (var id in this.children_toggle_status) {
@@ -122,7 +131,7 @@
                 var num_item =
                     typeof item === "number" ? item : parseInt(item, 10);
                 if (num_item > 0 && num_item <= items_length) {
-                    this.handleChildClicked(String(num_item - 1));
+                    this.handleChildClicked(String(num_item));
                 } else {
                     throw new Error(
                         ("There are only " + items_length + " AccordionItems, " + num_item + " is out of bounds. [indexing from 1]")
@@ -394,21 +403,24 @@
         mounted: function mounted() {
             var this$1 = this;
 
-            this.$parent.$on("toggle-child", this.handleToggleRequest);
+            this.$nextTick(function () {
+                this$1.$parent.$emit("child-registered", this$1);
+                this$1.$parent.$on("toggle-child", this$1.handleToggleRequest);
 
-            var accordionBody = this.$refs.body;
-            var eName = transitionEndEventName(accordionBody);
-            accordionBody.addEventListener(eName, function (e) {
-                if (accordionBody.style.height !== "0px") {
-                    this$1.autoHeightStart(accordionBody);
-                } else {
-                    this$1.autoHeightStop();
-                    this$1.showCardContent = false;
-                }
+                var accordionBody = this$1.$refs.body;
+                var eName = transitionEndEventName(accordionBody);
+                accordionBody.addEventListener(eName, function (e) {
+                    if (accordionBody.style.height !== "0px") {
+                        this$1.autoHeightStart(accordionBody);
+                    } else {
+                        this$1.autoHeightStop();
+                        this$1.showCardContent = false;
+                    }
+                });
             });
         },
-        destroyed: function destroyed() {
-            this.$parent.$off("toggle-child");
+        beforeDestroy: function beforeDestroy() {
+            this.$parent.$emit("child-removed", this.uniqueId);
         },
         watch: {
             isOpen: function isOpen(newStatus) {
@@ -575,11 +587,11 @@
       /* style */
       var __vue_inject_styles__$2 = function (inject) {
         if (!inject) { return }
-        inject("data-v-0d986444_0", { source: ".accordion-body[data-v-0d986444]{height:0;overflow:hidden}.caret-down[data-v-0d986444]{transform:rotate(180deg)}.header-icon[data-v-0d986444]{width:100%}", map: undefined, media: undefined });
+        inject("data-v-bc7d9a68_0", { source: ".accordion-body[data-v-bc7d9a68]{height:0;overflow:hidden}.caret-down[data-v-bc7d9a68]{transform:rotate(180deg)}.header-icon[data-v-bc7d9a68]{width:100%}", map: undefined, media: undefined });
 
       };
       /* scoped */
-      var __vue_scope_id__$2 = "data-v-0d986444";
+      var __vue_scope_id__$2 = "data-v-bc7d9a68";
       /* module identifier */
       var __vue_module_identifier__$2 = undefined;
       /* functional template */
