@@ -1,2 +1,2 @@
-export { default } from './dist/vue-bulma-accordion.common'
-export * from './dist/vue-bulma-accordion.common'
+export { default } from './dist/main.js';
+export * from './dist/main.js';

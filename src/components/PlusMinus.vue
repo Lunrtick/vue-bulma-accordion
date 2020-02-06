@@ -1,8 +1,8 @@
 <template>
-    <div class="plus-minus">
-        <div class="horizontal"></div>
-        <div :class="verticalClasses"></div>
-    </div>
+    <span class="plus-minus">
+        <span class="horizontal"></span>
+        <span :class="verticalClasses"></span>
+    </span>
 </template>
 
 <script>

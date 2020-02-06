@@ -1,7 +1,7 @@
 {
     "name": "vue-bulma-accordion",
     "description": "A simple, easily configurable accordion or collapsible for Vue, styled with Bulma",
-    "version": "0.4.8",
+    "version": "0.5.0",
     "author": {
         "name": "Gabriel Soicher",
         "email": "gabe@underware.co.za"
@@ -19,10 +19,8 @@
     "module": "dist/export.esm.js",
     "unpkg": "dist/vue-bulma-accordion.min.js",
     "scripts": {
-        "build": "yarn run build:unpkg & yarn run build:es & yarn run build:umd",
-        "build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/vue-bulma-accordion.umd.js",
-        "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/vue-bulma-accordion.esm.js",
-        "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/vue-bulma-accordion.min.js",
+        "build": "parcel build --experimental-scope-hoisting ./src/entry.js -o \"main.js\" && bash compressDist.sh",
+        "serve": "parcel serve index.html",
         "deploy:docs": "bash deployDocs.sh"
     },
     "repository": {
@@ -60,7 +58,7 @@
         "rollup-plugin-vue": "4.3.2",
         "vue-loader": "^15.5.1",
         "vue-style-loader": "^4.1.2",
-        "vue-template-compiler": "^2.5.21",
+        "vue-template-compiler": "^2.6.11",
         "webpack": "^4.28.4",
         "webpack-cli": "^3.2.1"
     },

@@ -7,10 +7,9 @@ A simple, easily configurable accordion or collapsible for Vue, styled with Bulm
 
 Full docs [here](https://lunrtick.github.io/vue-bulma-accordion/)
 
-## New in 0.4.0
+## New in 0.5
 
--   Bulma is now a peer dependency - you need to install it yourself (or define your own styles for the necessary css classes)
--   It's now possible to have items open initially
+-   SSR Support!
 
 ## Table of contents
 

@@ -1,66 +1,57 @@
 <template>
-  <div :class="card_classes">
-    <div class="card-header" @click="notifyOfClick">
-      <p class="card-header-title">
-        <slot name="title"></slot>
-      </p>
-      <p class="card-header-icon">
-        <span v-if="!usingCustomIcon" class="icon">
-          <svg
-            v-if="showCaret"
-            :class="dropdownIconClasses"
-            :style="iconStyle"
-            version="1.1"
-            viewBox="0 0 129 129"
-            enable-background="new 0 0 129 129"
-          >
-            <g>
-              <path
-                d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
-              ></path>
-            </g>
-          </svg>
-          <PlusMinus v-if="showPlus || showMinus" :minus="showMinus"/>
-        </span>
-        <span v-else class="icon">
-          <slot name="icon"></slot>
-          <slot v-if="isOpen" name="icon-open"></slot>
-          <slot v-else name="icon-closed"></slot>
-        </span>
-      </p>
+    <div :class="card_classes">
+        <div class="card-header" @click="handleClick">
+            <p class="card-header-title">
+                <slot name="title"></slot>
+            </p>
+            <p class="card-header-icon">
+                <span v-if="!usingCustomIcon" class="icon">
+                    <span v-if="showCaret" :class="dropdownIconClasses" :style="iconStyle">
+                        <svg
+                            version="1.1"
+                            viewBox="0 0 129 129"
+                            enable-background="new 0 0 129 129"
+                        >
+                            <g>
+                                <path
+                                    d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                                />
+                            </g>
+                        </svg>
+                    </span>
+                    <PlusMinus v-if="showPlus || showMinus" :minus="showMinus" />
+                </span>
+                <span v-else class="icon">
+                    <slot name="icon"></slot>
+                    <slot v-if="isOpen" name="icon-open"></slot>
+                    <slot v-else name="icon-closed"></slot>
+                </span>
+            </p>
+        </div>
+        <div class="accordion-body" ref="body" :style="slideStyle">
+            <div :class="card_content_classes" ref="bodyContent">
+                <slot name="content"></slot>
+            </div>
+            <div :class="footerClasses" ref="bodyFooter">
+                <slot name="footer"></slot>
+            </div>
+        </div>
     </div>
-    <div class="accordion-body" ref="body" :style="slideStyle">
-      <div :class="card_content_classes" ref="bodyContent">
-        <slot name="content"></slot>
-      </div>
-      <div :class="footerClasses" ref="bodyFooter">
-        <slot name="footer"></slot>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
 import PlusMinus from "./PlusMinus.vue";
 import { transitionEndEventName } from "../utils/index.js";
+import config from "../SharedConfig";
 export default {
     name: "bulma-accordion-item",
     components: {
         PlusMinus
     },
-    data() {
-        return {
-            isOpen: false,
-            autoHeightInterval: null,
-            showCardContent: false,
-            uniqueId: null
-        };
-    },
+    inject: ["AccordionItemController", "AccordionItemConfig"],
     mounted() {
+        this.uniqueId = this.AccordionItemController.register();
         this.$nextTick(() => {
-            this.$parent.$emit("child-registered", this);
-            this.$parent.$on("toggle-child", this.handleToggleRequest);
-
             const accordionBody = this.$refs.body;
             const eName = transitionEndEventName(accordionBody);
             accordionBody.addEventListener(eName, (e) => {
@@ -74,7 +65,14 @@ export default {
         });
     },
     beforeDestroy() {
-        this.$parent.$emit("child-removed", this.uniqueId);
+        this.autoHeightStop();
+    },
+    data() {
+        return {
+            autoHeightInterval: null,
+            showCardContent: false,
+            uniqueId: null
+        };
     },
     watch: {
         isOpen(newStatus) {
@@ -88,29 +86,12 @@ export default {
     },
     computed: {
         config() {
-            const {
-                caretAnimation: animation = {
-                    duration: "450ms",
-                    timerFunc: "ease"
-                },
-                dropdown = false,
-                icon = "caret",
-                slide = {
-                    duration: "700ms",
-                    timerFunc: "ease"
-                }
-            } = this.$parent;
-            return {
-                animation,
-                dropdown,
-                icon,
-                slide
-            };
+            return this.AccordionItemConfig || config;
         },
         dropdownIconClasses() {
             return {
                 "header-icon": true,
-                "caret-down": !this.isOpen
+                "caret-down": this.isOpen
             };
         },
         card_classes() {
@@ -150,34 +131,32 @@ export default {
             };
         },
         iconStyle() {
-            const c = this.config.animation;
+            const c = this.config.caretAnimation;
             if (c.none === true) {
                 return {};
             }
             return {
                 transition: `all ${c.duration} ${c.timerFunc}`
             };
+        },
+        isOpen() {
+            return this.AccordionItemController.isOpen(this.uniqueId);
         }
     },
     methods: {
-        handleToggleRequest(toggleId) {
-            if (toggleId === this.uniqueId) {
-                this.toggleCollapsed();
-            }
-        },
         setUniqueId(id) {
             this.uniqueId = id;
         },
-        notifyOfClick() {
+        handleClick() {
             if (this.uniqueId) {
-                this.$parent.$emit("child-clicked", this.uniqueId);
+                this.AccordionItemController.toggleOpen(this.uniqueId);
             }
         },
         collapse() {
-            this.isOpen = false;
+            this.AccordionItemController.setOpen(this.uniqueId, false);
         },
         toggleCollapsed() {
-            this.isOpen = !this.isOpen;
+            this.AccordionItemController.toggleOpen(this.uniqueId);
         },
         doTheSlide() {
             const el = this.$refs.body;

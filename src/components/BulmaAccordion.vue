@@ -1,12 +1,19 @@
 <template>
-  <div class="accordion">
-    <slot></slot>
-  </div>
+    <div class="accordion">
+        <slot></slot>
+    </div>
 </template>
 
 <script>
+import { AccordionItemController } from "../AccordionItemController";
+import config from "../SharedConfig";
+const aic = new AccordionItemController(config);
 export default {
     name: "bulma-accordion",
+    provide: {
+        AccordionItemController: aic,
+        AccordionItemConfig: config
+    },
     props: {
         initialOpenItem: {
             required: false,
@@ -26,7 +33,7 @@ export default {
             type: Object,
             default: () => ({
                 duration: "450ms",
-                timerFunc: "ease"
+                timerFunc: "ease 0s"
             }),
             validator: (config) => {
                 const isValid =
@@ -58,7 +65,7 @@ export default {
             type: Object,
             default: () => ({
                 duration: "700ms",
-                timerFunc: "ease"
+                timerFunc: "ease 0s"
             }),
             validator: (config) => {
                 const isValid =
@@ -68,68 +75,19 @@ export default {
             }
         }
     },
-    mounted() {
-        this.$on("child-registered", (child) => {
-            const id = this.getNextId();
-            child.setUniqueId(id);
-            this.children_toggle_status[id] = false;
-        });
-        this.$on("child-clicked", this.handleChildClicked);
-        this.$on("child-removed", (child_id) => {
-            delete this.children_toggle_status[child_id];
-        });
-        this.$nextTick(() => {
-            this.openInitialItems(this.$children.length);
-        });
+    beforeMount() {
+        config.caretAnimation = this.caretAnimation;
+        config.dropdown = this.dropdown;
+        config.icon = this.icon;
+        config.slide = this.slide;
+        aic.setInitiallyOpen(this.initialOpenItem || this.initialOpenItems);
     },
     data() {
         return {
-            next_id: 1,
-            children_toggle_status: {}
+            AccordionItemController: aic
         };
     },
-    methods: {
-        getNextId() {
-            const v = this.next_id.toString(10);
-            this.next_id += 1;
-            return v;
-        },
-        handleChildClicked(child_id) {
-            if (!this.dropdown) {
-                for (const id in this.children_toggle_status) {
-                    if (this.children_toggle_status[id] && id !== child_id) {
-                        this.$emit("toggle-child", id);
-                        this.children_toggle_status[id] = false;
-                    }
-                }
-            }
-            this.children_toggle_status[child_id] = !this
-                .children_toggle_status[child_id];
-            this.$emit("toggle-child", child_id);
-        },
-        openInitialItems(items_length) {
-            const i = this.initialOpenItem;
-            const is = this.initialOpenItems;
-            if (i !== null) {
-                this.openInitialItem(i, items_length);
-            } else if (is !== null) {
-                is.forEach((item, idx) => {
-                    this.openInitialItem(item, items_length);
-                });
-            }
-        },
-        openInitialItem(item, items_length) {
-            const num_item =
-                typeof item === "number" ? item : parseInt(item, 10);
-            if (num_item > 0 && num_item <= items_length) {
-                this.handleChildClicked(String(num_item));
-            } else {
-                throw new Error(
-                    `There are only ${items_length} AccordionItems, ${num_item} is out of bounds. [indexing from 1]`
-                );
-            }
-        }
-    }
+    methods: {}
 };
 </script>
 

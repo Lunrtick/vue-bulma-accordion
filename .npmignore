@@ -11,3 +11,4 @@ docs/
 browserlist
 *.sh
 yarn.lock
+.cache/
